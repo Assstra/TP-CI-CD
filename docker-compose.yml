@@ -3,8 +3,8 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      - POSTGRES_PASSWORD=test
-      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=${CITY_API_DB_PWD}
+      - POSTGRES_USER=${CITY_API_DB_USER}
       - POSTGRES_DB=city_api
     ports:
       - "5435:5432"
