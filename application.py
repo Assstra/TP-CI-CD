@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 conn = 0
 
-CITY_API_ADDR = os.getenv("CITY_API_ADDR", default='127.0.0.1')
+CITY_API_ADDR = os.getenv("CITY_API_ADDR", default='0.0.0.0')
 CITY_API_PORT = os.getenv("CITY_API_PORT", default='2022')
 CITY_API_DB_PORT = os.getenv("CITY_API_DB_PORT")
 CITY_API_DB_USER = os.getenv("CITY_API_DB_USER")
@@ -22,7 +22,7 @@ if not CITY_API_DB_PORT or not CITY_API_DB_USER or not CITY_API_DB_PWD:
 try: 
     #Establishing the database connection
     conn = psycopg2.connect(
-    database="city_api", user=CITY_API_DB_USER, password=CITY_API_DB_PWD, host="postgres", port=5432
+    database="city_api", user=CITY_API_DB_USER, password=CITY_API_DB_PWD, host="db", port=CITY_API_DB_PORT
     )
 except Exception as err:
     print(err)
