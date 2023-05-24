@@ -1,4 +1,5 @@
 from flask import Flask, request
+import os
 import psycopg2
 import json
 
@@ -6,10 +7,19 @@ app = Flask(__name__)
 
 conn = 0
 
+CITY_API_ADDR = os.environ.get("CITY_API_ADDR", default='127.0.0.1')
+CITY_API_PORT = os.environ.get("CITY_API_PORT", default='2022')
+CITY_API_DB_URL = os.environ.get("CITY_API_DB_URL")
+CITY_API_DB_USER = os.environ.get("CITY_API_DB_USER")
+CITY_API_DB_PWD = os.environ.get("CITY_API_DB_PWD")
+
+if not CITY_API_DB_URL or not CITY_API_DB_USER or not CITY_API_DB_PWD:
+    raise ValueError("Missing database configuration env variables")
+
 try: 
     #Establishing the database connection
     conn = psycopg2.connect(
-    database="city_api", user='test', password='test', host='127.0.0.1', port='5435'
+    database="city_api", user=CITY_API_DB_USER, password=CITY_API_DB_PWD, host=CITY_API_DB_URL, port='5435'
     )
 except Exception as err:
     print(err)
@@ -43,3 +53,6 @@ def city():
         except Exception as err:
             return str(err), 500
         return json.dumps(cities), 200
+
+if __name__ == '__main__':
+    app.run(host=CITY_API_ADDR, port=CITY_API_PORT)
