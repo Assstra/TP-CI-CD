@@ -21,6 +21,7 @@ try:
     conn = psycopg2.connect(
     database="city_api", user=CITY_API_DB_USER, password=CITY_API_DB_PWD, host=CITY_API_DB_URL, port='5432'
     )
+
 except Exception as err:
     print(err)
     raise RuntimeError("Cannot connect to the database")
