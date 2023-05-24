@@ -14,7 +14,18 @@ services:
       - /var/lib/postgres
       - ./db/init.sql:/docker-entrypoint-initdb.d/create_city.sql
       - ./db/populate.sql:/docker-entrypoint-initdb.d/populate_city.sql
-
+  postgres-test:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${CITY_API_DB_PWD:?error}
+      - POSTGRES_USER=${CITY_API_DB_USER?:error}
+      - POSTGRES_DB=city_api
+    expose:
+      - 5435
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/create_city.sql
+      - ./db/populate.sql:/docker-entrypoint-initdb.d/populate_city.sql
   python:
     build:
       context: .
