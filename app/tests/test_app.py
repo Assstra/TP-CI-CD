@@ -2,9 +2,11 @@ def test_healthcheck(client):
     response = client.get("/_health")
     assert response.status_code == 204
 
+
 def test_get_cities(client):
     response = client.get("/city")
     assert response.status_code == 200
+
 
 def test_insert_city(client):
     response = client.post("/city", json={
