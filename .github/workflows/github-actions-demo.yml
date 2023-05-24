@@ -8,5 +8,5 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - name: Analysing the code with pylint
         run: |
-          pylint app/application.py
+          pylint $(git ls-files '*.py')
       - run: echo "🍏 This job's status is ${{ job.status }}."
