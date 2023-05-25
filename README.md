@@ -54,7 +54,10 @@ Par la suite, nous avons aussi completé notre fichier docker-compose.yml pour y
       - .env
     # l'api a besoin que la base de données sois créer pour pouvoir l'utiliser
     depends_on:
-      - postgres
+      - db
+    # le port de l'application défini par l'utilisateur
+    ports:
+      - ${CITY_API_PORT:?error}:${CITY_API_PORT:?error}
 ```
 
 ### 2. Créez une base de données  city_api  avec une table  city  contenant les colonnes suivantes :
@@ -62,6 +65,16 @@ Par la suite, nous avons aussi completé notre fichier docker-compose.yml pour y
 - ***department_code** , une chaîne de caractères non nulle ;
 - **insee_code** , une chaîne de caractères ;
 - **zip_code** , une chaîne de caractères ;
-name , une chaîne de caractères non nulle ;
-lat , un flottant non nul ;
-lon , un flottant non nul.
+- **name** , une chaîne de caractères non nulle ;
+- **lat** , un flottant non nul ;
+- **lon** , un flottant non nul.
+
+Pour créer cette table, nous avons opté de créer un script *init.sql* que nous passerons à docker lors de l'initialisation du conteneur. 
+
+Il s'éxécuteras et créeras la table dans la base de données qui seras populé par le script *populate.sql*.
+
+
+ ### 3. Dans le langage de votre choix, créez un service web ayant les spécifications suivantes :
+  - `POST /city` avec pour corps de la requête un JSON au format décrit plus bas doit retourner un code `201` et enregistrer la ville dans la base de données ;
+  - `GET /city` doit retourner un code `200` avec la liste des villes au format JSON ;
+  - `GET /_health` doit retourner un code `204`.
