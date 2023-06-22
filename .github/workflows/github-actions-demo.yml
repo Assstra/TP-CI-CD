@@ -2,11 +2,14 @@ name: GitHub Actions CI
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  python-ci:
     runs-on: self-hosted
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🎉 Event triggered by ${{ github.event_name }}"
       - name: Analysing the code with pylint
         run: |
           pylint $(git ls-files '*.py')
+      - name: Building docker image
+        run: |
+          docker build . --file Dockerfile --tag python_ci
       - run: echo "🍏 This job's status is ${{ job.status }}."
