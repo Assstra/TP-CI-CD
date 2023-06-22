@@ -16,5 +16,5 @@ jobs:
           pylint --fail-under=5 app/*
       - name: Building docker image
         run: |
-          docker build . --tag python_ci
+          docker build -f python.dockerfile . --tag python_ci_project
       - run: echo "🍏 This job's status is ${{ job.status }}."
