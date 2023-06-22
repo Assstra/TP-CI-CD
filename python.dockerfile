@@ -9,7 +9,7 @@ WORKDIR /app
 RUN pip install -r requirements.txt
 
 # Copy app folder
-COPY . /app
+COPY ./app /app
 
 # configure the container to run in an executed manner
 ENTRYPOINT [ "python" ]

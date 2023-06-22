@@ -10,6 +10,7 @@ conn = 0
 
 CITY_API_ADDR = os.environ.get("CITY_API_ADDR", default='127.0.0.1')
 CITY_API_PORT = os.environ.get("CITY_API_PORT", default='2022')
+CITY_API_DB_PORT = os.environ.get("CITY_API_DB_PORT", default='5435')
 CITY_API_DB_URL = os.environ.get("CITY_API_DB_URL")
 CITY_API_DB_USER = os.environ.get("CITY_API_DB_USER")
 CITY_API_DB_PWD = os.environ.get("CITY_API_DB_PWD")
@@ -24,7 +25,7 @@ try:
         user=CITY_API_DB_USER,
         password=CITY_API_DB_PWD,
         host=CITY_API_DB_URL,
-        port='5435'
+        port=CITY_API_DB_PORT
     )
 
 except Exception as err1:
