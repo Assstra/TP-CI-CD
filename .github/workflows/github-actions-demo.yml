@@ -8,7 +8,7 @@ jobs:
       - run: echo "🎉 Event triggered by ${{ github.event_name }}"
       - name: Analysing the code with pylint
         run: |
-          pylint $(ls | grep '\.py')
+          pylint *
       - name: Building docker image
         run: |
           docker build . --file Dockerfile --tag python_ci
