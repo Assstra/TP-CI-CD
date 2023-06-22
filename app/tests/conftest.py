@@ -1,5 +1,4 @@
 """Module for test configurations."""
-from application import app as flask_app
 import os
 import sys
 import pytest
@@ -9,6 +8,7 @@ parent_directory = os.path.dirname(current)
 
 sys.path.append(parent_directory)
 
+from application import app as flask_app
 
 @pytest.fixture
 def app():
