@@ -5,11 +5,12 @@ jobs:
   python-ci:
     runs-on: self-hosted
     steps:
+      - uses: actions/checkout@v3
       - run: ls
       - run: echo "🎉 Event triggered by ${{ github.event_name }}"
       - name: Analysing the code with pylint
         run: |
-          pylint $(find . -name "*.py" | xargs)
+          pylint app/*
       - name: Building docker image
         run: |
           docker build . --file Dockerfile --tag python_ci
