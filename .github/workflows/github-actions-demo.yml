@@ -24,6 +24,7 @@ jobs:
       
       - name: Testing code
         run: |
+          pip3 install pytest
           pytest
 
       - name: Log in to the Container registry
