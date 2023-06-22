@@ -5,6 +5,7 @@ jobs:
   python-ci:
     runs-on: self-hosted
     steps:
+      - run: ls
       - run: echo "🎉 Event triggered by ${{ github.event_name }}"
       - name: Analysing the code with pylint
         run: |
