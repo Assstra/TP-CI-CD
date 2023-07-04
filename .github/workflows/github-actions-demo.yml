@@ -4,7 +4,7 @@ on: [push]
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/city-api
+  IMAGE_NAME: ${{ github.repository_owner }}/city-api:latest
 
 jobs:
   python-ci:
@@ -26,7 +26,7 @@ jobs:
       - name: Testing code
         run: |
           docker compose up -d postgres-test
-          docker ps
+          sleep 5
           docker exec postgres-test psql -U test city_api -p 5436 -f database/create_city.sql
           python3 -m pytest -c app/tests/pytest.ini
           docker compose down
@@ -52,7 +52,7 @@ jobs:
         with:
           file: python.dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}:latest
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
