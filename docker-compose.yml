@@ -1,5 +1,6 @@
 services:
   db:
+    container_name: postgres-db
     image: postgres:latest
     restart: always
     environment:
@@ -14,6 +15,7 @@ services:
       - ./db/populate.sql:/docker-entrypoint-initdb.d/populate_city.sql
     command: -p ${CITY_API_DB_PORT?:error}
   postgres-test:
+    container_name: postgres-test
     image: postgres:latest
     restart: always
     environment:
@@ -24,6 +26,7 @@ services:
       - ${CITY_API_TEST_DB_PORT?:error}:${CITY_API_TEST_DB_PORT?:error}
     command: -p ${CITY_API_TEST_DB_PORT?:error}
   python:
+    container_name: flask-ci-cd
     build:
       context: .
       dockerfile: python.dockerfile
