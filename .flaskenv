@@ -1,0 +1,3 @@
+FLASK_APP=application
+FLASK_RUN_PORT=2022
+FLASK_ENV=production

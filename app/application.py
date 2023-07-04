@@ -75,4 +75,4 @@ def city():
 
 
 if __name__ == '__main__':
-    app.run(host=CITY_API_ADDR, port=CITY_API_PORT)
+    app.run(host=CITY_API_ADDR)

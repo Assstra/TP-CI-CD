@@ -6,12 +6,13 @@ services:
       - POSTGRES_PASSWORD=${CITY_API_DB_PWD:?error}
       - POSTGRES_USER=${CITY_API_DB_USER?:error}
       - POSTGRES_DB=city_api
-    expose:
-      - ${CITY_API_DB_PORT?:error}
+    ports:
+      - ${CITY_API_DB_PORT?:error}:${CITY_API_DB_PORT?:error}
     volumes:
       - /var/lib/postgres
       - ./db/init.sql:/docker-entrypoint-initdb.d/create_city.sql
       - ./db/populate.sql:/docker-entrypoint-initdb.d/populate_city.sql
+    command: -p ${CITY_API_DB_PORT?:error}
   postgres-test:
     image: postgres:latest
     restart: always
@@ -19,11 +20,12 @@ services:
       - POSTGRES_PASSWORD=${CITY_API_DB_PWD:?error}
       - POSTGRES_USER=${CITY_API_DB_USER?:error}
       - POSTGRES_DB=city_api
-    expose:
-      - 5435
+    ports:
+      - ${CITY_API_TEST_DB_PORT?:error}:${CITY_API_TEST_DB_PORT?:error}
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/create_city.sql
       - ./db/populate.sql:/docker-entrypoint-initdb.d/populate_city.sql
+    command: -p ${CITY_API_TEST_DB_PORT?:error}
   python:
     build:
       context: .
