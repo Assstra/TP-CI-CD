@@ -25,6 +25,7 @@ jobs:
       
       - name: Testing code
         run: |
+          docker compose up -d postgres-test
           python3 -m pytest -c app/tests/pytest.ini
 
       - name: Log in to the Container registry
