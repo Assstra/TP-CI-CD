@@ -19,7 +19,7 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      - POSTGRES_PASSWORD=${CITY_API_DB_PWD:?error}
+      #- POSTGRES_PASSWORD=${CITY_API_DB_PWD:?error}
       - POSTGRES_USER=${CITY_API_DB_USER?:error}
       - POSTGRES_DB=city_api
     ports:
