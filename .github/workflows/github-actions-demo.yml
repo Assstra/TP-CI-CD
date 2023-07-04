@@ -27,6 +27,8 @@ jobs:
         run: |
           docker compose down
           docker compose up -d postgres-test --build
+          docker ps
+          sleep 20
           docker exec postgres-test psql -U test city_api -p 5436 -f database/create_city.sql
           python3 -m pytest -c app/tests/pytest.ini
           docker compose down
