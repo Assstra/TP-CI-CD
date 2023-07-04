@@ -22,9 +22,6 @@ services:
       - POSTGRES_DB=city_api
     ports:
       - ${CITY_API_TEST_DB_PORT?:error}:${CITY_API_TEST_DB_PORT?:error}
-    volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/create_city.sql
-      - ./db/populate.sql:/docker-entrypoint-initdb.d/populate_city.sql
     command: -p ${CITY_API_TEST_DB_PORT?:error}
   python:
     build:
