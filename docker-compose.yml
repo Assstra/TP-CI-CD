@@ -19,11 +19,13 @@ services:
     image: postgres:latest
     restart: always
     environment:
-      #- POSTGRES_PASSWORD=${CITY_API_DB_PWD:?error}
+      - POSTGRES_PASSWORD=${CITY_API_DB_PWD:?error}
       - POSTGRES_USER=${CITY_API_DB_USER?:error}
       - POSTGRES_DB=city_api
     ports:
       - ${CITY_API_TEST_DB_PORT?:error}:${CITY_API_TEST_DB_PORT?:error}
+    volumes:
+      - ./db/init.sql:/database/create_city.sql
     command: -p ${CITY_API_TEST_DB_PORT?:error}
   python:
     container_name: flask-ci-cd

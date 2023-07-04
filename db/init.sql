@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS city;
 CREATE TABLE city (
     id SERIAL PRIMARY KEY,
     department_code character varying(255) NOT NULL,
