@@ -27,7 +27,8 @@ jobs:
         run: |
           docker compose up -d postgres-test
           docker cp db/init.sql postgres-test:/docker-entrypoint-initdb.d/init.sql
-          docker exec postgres-test psql city_api test -f docker-entrypoint-initdb.d/init.sql
+          docker ps
+          docker exec postgres-test psql -u test -p test city_api -f docker-entrypoint-initdb.d/init.sql
           python3 -m pytest -c app/tests/pytest.ini
 
       - name: Log in to the Container registry
