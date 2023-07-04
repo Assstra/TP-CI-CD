@@ -48,7 +48,7 @@ jobs:
         with:
           file: python.dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}:latest
           labels: ${{ steps.meta.outputs.labels }}
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
