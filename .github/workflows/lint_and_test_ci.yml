@@ -43,7 +43,7 @@ jobs:
       
       - name: Testing code
         run: |
-          docker exec postgres-test psql -U test city_api -p 5436 -f database/create_city.sql
+          psql -U test city_api -p 5436 -f db/init.sql
           python3 -m pytest -c app/tests/pytest.ini
 
       # - name: Log in to the Container registry
