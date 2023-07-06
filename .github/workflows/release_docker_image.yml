@@ -1,0 +1,45 @@
+name: GitHub Release CI
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/city-api
+
+jobs:
+  build:
+    name: Build Docker image
+    runs-on: self-hosted
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+        name: Check out the repository
+
+      - uses: docker/login-action@v2
+        name: Log in to the container registry
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/metadata-action@v4
+        name: Extract metadata (tags, labels) for Docker
+        id: meta
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            latest
+
+      - uses: docker/build-push-action@v4
+        name: Build and push the Docker image
+        with:
+          file: python.dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
