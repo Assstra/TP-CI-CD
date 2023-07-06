@@ -27,7 +27,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          # Maps tcp port 5436 on service container to the host
+          # Maps tcp port 5432 on service container to port 5436 on the host
           - 5436:5432
 
     steps:
@@ -46,7 +46,7 @@ jobs:
       
       - name: Testing code
         run: |
-          psql -U test city_api -p 5436 -f db/init.sql
+          psql -U test city_api -h localhost -p 5436 -f db/init.sql
           python3 -m pytest -c app/tests/pytest.ini
 
       # - name: Log in to the Container registry
