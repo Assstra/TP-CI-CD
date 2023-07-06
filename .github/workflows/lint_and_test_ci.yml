@@ -48,6 +48,8 @@ jobs:
         run: |
           psql -U test city_api -h localhost -p 5436 -f db/init.sql
           python3 -m pytest -c app/tests/pytest.ini
+        env:
+          PGPASSWORD: test
 
       # - name: Log in to the Container registry
         # uses: docker/login-action@v2
