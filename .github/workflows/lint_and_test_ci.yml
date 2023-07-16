@@ -1,0 +1,50 @@
+name: GitHub Actions CI
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
+
+jobs:
+  python-ci:
+    runs-on: self-hosted
+    # Service containers to run with `container-job`
+    services:
+      postgres-test:
+        image: postgres
+        # Provide the env for postgres
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_USER: test
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5436
+          POSTGRES_DB: city_api
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to port 5436 on the host
+          - 5436:5432
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install pytest
+          pip3 install pylint
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Analysing the code with pylint
+        run: |
+          pylint --fail-under=5 app/*
+      
+      - name: Testing code
+        run: |
+          psql -U test city_api -h localhost -p 5436 -f db/init.sql
+          python3 -m pytest -c app/tests/pytest.ini
+        env:
+          PGPASSWORD: test
+
+      - run: echo "🍏 This job's status is ${{ job.status }}."
