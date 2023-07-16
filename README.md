@@ -350,14 +350,70 @@ Enfin on modifie la ligne *tags* pour ajouter à l'image les même tags :
         tags: ${{ steps.meta.outputs.tags }}
 ```
 
-### 11. Installez Minikube sur votre machine local.
+### 11) Installez Minikube sur votre machine local.
 
-### 12. Écrivez un chart Helm de déploiement de l'application.
+Pour installer minikube on peut suivre la documentation à [https://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start/)
 
-### 13. Déployez votre application dans votre Minikube.
+```sh
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+Pour lancer minikube il suffit d'utiliser la commande 
+```sh
+minikube start
+```
 
-### 14. Ajouter un endpoint /metrics compatible Prometheus (des libs sont disponibles).
+### 12) Écrivez un chart Helm de déploiement de l'application.
 
-### 15. Ajoutez un Prometheus dans votre docker-compose qui scrappe les métriques de votre application.
+#### Installer helm :
 
-### 16. Ajoutez un Grafana dans votre docker-compose et créez y un dahsboard pour monitorer votre application.
+Documentation officielle : https://helm.sh/docs/intro/install/
+
+
+Pour utiliser le helm chart de manière générale : 
+```
+helm install <name> <path_to_helm_directory>
+```
+
+Pour l'arrèter :
+```
+helm uninstall <name>
+```
+
+Pour initialiser un helm chart, nous en avons utilisé `helm create city-api` pour créer un générique duquel on pouvais partir.
+
+Pour le moment, l'API est accessible depuis l'extérieur du cluster, mais en changeant la valeur du type de service à ClusterIP on peut le restreindre.
+```yaml
+service:
+  type: NodePort # change to ClusterIP to block access from outside the Clutser
+```
+L'utilisateur et le mot de passe sont défini dans le fichier city-api/values.yaml
+
+
+### 13) Déployez votre application dans votre Minikube.
+
+
+Pour déployer notre application dans le minikube il suffit de se positionner dans ce directoire et de installer le helm chart:
+```
+helm install city-api ./city-api
+```
+
+Pour récuperer le URL du service de l'API :
+```
+minikube service --all
+```
+
+Vous trouverez le service `api` avec une url à côté.
+
+Il se peut que vous devez attendre un peu avant de pouvoir accèder à l'application.
+
+Pour arrêter l'application :
+```
+helm uninstall city-api
+```
+
+1)  Ajouter un endpoint `/metrics` compatible Prometheus (des [libs](https://sysdig.com/blog/prometheus-metrics/) sont disponibles).
+
+2)  Ajoutez un Prometheus dans votre docker-compose qui scrappe les métriques de votre application.
+
+3)  Ajoutez un Grafana dans votre docker-compose et créez y un dahsboard pour monitorer votre application

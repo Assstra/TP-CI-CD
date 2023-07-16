@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: api
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: api
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.imagePullPolicy}}
+        ports:
+          - name: http
+            containerPort: {{ .Values.service.port }}
+            protocol: TCP
+        startupProbe:
+          httpGet:
+            path: {{ .Values.probePath }}
+            port: http
+          failureThreshold: 6
+          periodSeconds: 20
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.probePath }}
+            port: http
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.probePath }}
+            port: http
+        env:
+          - name: "CITY_API_DB_USER"
+            value: {{ .Values.postgresql.auth.username}}
+          - name: "CITY_API_DB_PWD"
+            value: {{ .Values.postgresql.auth.password}}
+          - name: "CITY_API_DB_PORT"
+            value: "5432"
+          - name: "CITY_API_DB_URL"
+            value: "{{ include "city-api.fullname" . }}-postgresql"
+          - name: "CITY_API_ADDR"
+            value: {{ .Values.service.address }}
+          - name: CITY_API_PORT
+            value: "{{ .Values.service.port }}"
