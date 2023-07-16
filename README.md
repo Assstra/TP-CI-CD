@@ -350,14 +350,55 @@ Enfin on modifie la ligne *tags* pour ajouter à l'image les même tags :
         tags: ${{ steps.meta.outputs.tags }}
 ```
 
-### 11. Installez Minikube sur votre machine local.
+### 11) Installez Minikube sur votre machine local.
 
-### 12. Écrivez un chart Helm de déploiement de l'application.
+Pour installer minikube on peut suivre la documentation à [https://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start/)
 
-### 13. Déployez votre application dans votre Minikube.
+```sh
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+Pour lancer minikube il suffit d'utiliser la commande 
+```sh
+minikube start
+```
 
-### 14. Ajouter un endpoint /metrics compatible Prometheus (des libs sont disponibles).
+### 12) Écrivez un chart Helm de déploiement de l'application.
 
-### 15. Ajoutez un Prometheus dans votre docker-compose qui scrappe les métriques de votre application.
+#### Install helm :
 
-### 16. Ajoutez un Grafana dans votre docker-compose et créez y un dahsboard pour monitorer votre application.
+Official documentation : https://helm.sh/docs/intro/install/
+
+
+Use the chart helm : 
+```
+helm install <name> <path_to_helm_directory>
+```
+
+Stop it :
+```
+helm uninstall <name>
+```
+
+At the moment, the API is accessible from outside the Cluster, however if you wish to change that you can simply change the type of service to ClusterIP.
+```yaml
+service:
+  type: NodePort # change to ClusterIP to block access from outside the Clutser
+```
+
+The username and password for the database are set in the city-api/values.yaml file, you are free to change them.
+
+
+### 13) Déployez votre application dans votre Minikube.
+
+
+To deploy the chart helm, simply run
+```
+helm install city-api ./city-api
+```
+
+14) Ajouter un endpoint `/metrics` compatible Prometheus (des [libs](https://sysdig.com/blog/prometheus-metrics/) sont disponibles).
+
+15) Ajoutez un Prometheus dans votre docker-compose qui scrappe les métriques de votre application.
+
+16) Ajoutez un Grafana dans votre docker-compose et créez y un dahsboard pour monitorer votre application
