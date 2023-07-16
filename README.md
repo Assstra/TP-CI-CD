@@ -120,7 +120,7 @@ PS : le fichier [pytest.ini](app/tests/pytest.ini) donne à pytest la configurat
 
 ### 5. Écrivez un fichier Dockerfile à la racine de votre projet. Testez que votre image Docker est correcte.
 
-Voici le fichier [python.dockerfile](./python.dockerfile) qui récupère l'image python, installe les dépendances d'après le fichier [requirement.txt](./requirements.txt), copie les fichiers présents dans le dossier ./app et run l'application.
+Voici le fichier [python.dockerfile](./python.dockerfile) qui récupère l'image python, installe les dépendances d'après le fichier [requirement.txt](./requirements.txt), copie les fichiers présents dans le dossier *./app* et run l'application.
 
 ```yml
 FROM python:3.10-alpine
