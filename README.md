@@ -78,7 +78,7 @@ Il s'éxécuteras et créeras la table dans la base de données qui seras popul�
   - `GET /city` doit retourner un code `200` avec la liste des villes au format JSON ;
   - `GET /_health` doit retourner un code `204`.
 
-Pour cette API, nous avons choisi d'utiliser [Flask](https://flask.palletsprojects.com/en/2.3.x/), un framework web python qui permet de démarrer rapidement une application web; le but de ce projet n'étant pas de passer du temps sur l'application mais sur la partie CI / CD.
+Pour cette API, nous avons choisi d'utiliser [Flask](https://flask.palletsprojects.com/en/2.3.x/), un framework web Python qui permet de démarrer rapidement une application web; le but de ce projet n'étant pas de passer du temps sur l'application mais sur la partie CI/CD.
 
 Le code de l'application se trouve dans le fichier [application.py](app/application.py).
 
@@ -105,7 +105,7 @@ sequenceDiagram
   - un test qui s'assure que la récupération de la liste des villes fonctionne correctement ;
   - un test qui s'assure que l'endpoint de healthcheck fonctionne correctement.
 
-Concernant les tests nous avons décidé d'utiliser [Pytest](https://docs.pytest.org/en/7.4.x/).
+Concernant les tests, nous avons décidé d'utiliser [Pytest](https://docs.pytest.org/en/7.4.x/).
 
 Pytest nous permet d'utiliser la commande : 
 
@@ -113,14 +113,14 @@ Pytest nous permet d'utiliser la commande :
 python3 -m pytest -c app/tests/pytest.ini
 ```
 
-Cette commande va trouver toutes les fonctions commençant par test_ et va essayer de les exécuter.
+Cette commande va trouver toutes les fonctions commençant par *test_* et va essayer de les exécuter.
 
-PS : le fichier [pytest.ini](app/tests/pytest.ini) donne à pytest la configuration nécessaire.
+PS : le fichier [pytest.ini](app/tests/pytest.ini) donne à pytest la configuration nécessaire. Comme nous utilisons une autre base de données pour les tests (cf. question 7), le fichier *pytest.init* permet de modifier les variables d'environnement et se connecter ainsi vers la base de données de tests sur un autre port que la base de données de production.
 
 
 ### 5. Écrivez un fichier Dockerfile à la racine de votre projet. Testez que votre image Docker est correcte.
 
-Voici le fichier [python.Dockerfile](./python.Dockerfile) qui récupère l'image python, installe les dépendances d'après le fichier [requirement.txt](./requirements.txt), copie les fichiers présents dans le dossier ./app et run l'application.
+Voici le fichier [python.dockerfile](./python.dockerfile) qui récupère l'image python, installe les dépendances d'après le fichier [requirement.txt](./requirements.txt), copie les fichiers présents dans le dossier ./app et run l'application.
 
 ```yml
 FROM python:3.10-alpine
@@ -152,7 +152,7 @@ Ensuite nous avons ajouté une action permettant de récupérer l'état actuel d
 
 Enfin avant de lancer le linter, nous installons les dépendances pour éviter que Pylint remonte des erreurs liés à cela.
 
-Le fichier [lint_and_test_ci.yml](.github/workflows/lint_and_test_ci.yml) (anciennement github_ci.yml) permet de réaliser toutes ces étapes et d'éxecuter [pylint](https://pypi.org/project/pylint/) qui failera si le score est inférieur à 5/10.
+Le fichier [lint_and_test_ci.yml](.github/workflows/lint_and_test_ci.yml) (anciennement *github_ci.yml*) permet de réaliser toutes ces étapes et d'éxecuter [pylint](https://pypi.org/project/pylint/) qui failera si le score est inférieur à 5/10.
 
 ```yml
 name: GitHub Actions CI
@@ -181,15 +181,15 @@ jobs:
 
 ## Solution N°1
 
-Ici les tests ont déjà été écrits. Il ne reste plus qu'à les inclures dans le workflow.
+Ici les tests ont déjà été écrits. Il ne reste plus qu'à les inclure dans le workflow.
 
-La première idée que nous avons eu était de créer un duplicat de notre base de donnée postgres (sobrement nommée postgres-test) qui serait lancé avec la commande
+La première idée que nous avons eu était de créer un duplicat de notre base de données postgres (nommée "postgres-test") qui serait lancé avec la commande
 
 ```bash
 docker compose up postgres-test
 ```
 
-Lors des tests nous avons eu des problèmes pour connecter la base de donnée et l'application. L'application se lançait après la base de donnée mais pas assez tard pour que la base de donnée puisse accepter la connexion.
+Lors des tests nous avons eu des problèmes pour connecter la base de données et l'application. L'application se lançait après la base de données mais pas assez tard pour que la base de données puisse accepter la connexion.
 
 ## Solution N°2
 
@@ -254,7 +254,7 @@ jobs:
 
 N'ayant pas d'idée pour build l'image, nous avons fait des recherches et sommes tombés sur le marketplace de Github.
 
-Le market place offre des actions préfabriqués pour simplifier le travail d'intégration continue avec Github. Nous avons décidés d'utiliser une action officielle de docker : **docker/build-push-action@v4**.
+Le market place offre des actions préfabriquées pour simplifier le travail d'intégration continue avec Github. Nous avons décidés d'utiliser une action officielle de docker : `docker/build-push-action@v4`.
 Cette action permet de build l'image docker et de la push sur le registry desirée, ce qui nous permet de réaliser la question 8 & 9 en même temps.
 
 Voici le job dédié au build et au push :
@@ -295,11 +295,11 @@ jobs:
 
 ## Remarques :
   - On spécifie dans les variables d'environnement la registry utilisée pour push l'image (ghcr.io ici).
-  - Il est nécessaire de se connecter en amont via l'action **docker/login-action@v2**. Cette action crée un token d'authentification **GITHUB_TOKEN** (ou utilise celui existant le cas echéant) pour se conncter à la registry de Github.
+  - Il est nécessaire de se connecter en amont via l'action `docker/login-action@v2`. Cette action crée un token d'authentification `GITHUB_TOKEN` (ou utilise celui existant le cas echéant) pour se connecter à la registry de Github.
 
 ### 9. Modifiez le workflow pour que l'image Docker soit push sur ghcr.io avec pour tag city-api:latest.
 
-Nous avons précédemment build & push l'image docker. Pour rajouter un tag nous pouvons simplement le préciser avec l'argument tags :
+Nous avons précédemment build & push l'image docker. Pour rajouter un tag nous pouvons simplement le préciser avec l'argument `tags` :
 
 ```yml
 - uses: docker/build-push-action@v4
@@ -323,7 +323,7 @@ on:
 ```
 
 Ensuite il faut donner le même tag à l'image push sur la registry Github. 
-On utilise ici une autre action officielle docker : **docker/metadata-action@v4**. Elle permet d'extraire les tags d'un commit.
+On utilise ici une autre action officielle docker : `docker/metadata-action@v4`. Elle permet d'extraire les tags d'un commit.
 
 Il suffit de rajouter un bloc dans notre fichier :
 
