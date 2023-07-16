@@ -380,6 +380,8 @@ Pour l'arrèter :
 helm uninstall <name>
 ```
 
+Pour initialiser un helm chart, nous en avons utilisé `helm create city-api` pour créer un générique duquel on pouvais partir.
+
 Pour le moment, l'API est accessible depuis l'extérieur du cluster, mais en changeant la valeur du type de service à ClusterIP on peut le restreindre.
 ```yaml
 service:
@@ -404,6 +406,11 @@ minikube service --all
 Vous trouverez le service `api` avec une url à côté.
 
 Il se peut que vous devez attendre un peu avant de pouvoir accèder à l'application.
+
+Pour arrêter l'application :
+```
+helm uninstall city-api
+```
 
 1)  Ajouter un endpoint `/metrics` compatible Prometheus (des [libs](https://sysdig.com/blog/prometheus-metrics/) sont disponibles).
 
