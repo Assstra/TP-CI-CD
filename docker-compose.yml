@@ -25,3 +25,20 @@ services:
       - db
     ports:
       - ${CITY_API_PORT:?error}:${CITY_API_PORT:?error}
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./metrics/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
+    ports:
+      - ${PROMETHEUS_PORT:?error}:9090
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - ./metrics/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./metrics/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ./metrics/dashboard.json:/var/lib/grafana/dashboards/dashboard.json
+    ports:
+      - ${GRAFANA_PORT:?error}:3000
+volumes:
+  prometheus:

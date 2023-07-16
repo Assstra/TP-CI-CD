@@ -3,7 +3,7 @@ import os
 import json
 import psycopg2
 from flask import Flask, request
-from prometheus_client import Counter, Summary, generate_latest
+from prometheus_client import Counter, generate_latest
 
 app = Flask(__name__)
 
@@ -36,8 +36,6 @@ except Exception as err1:
 cur = conn.cursor()
 
 http_requests_total = Counter('http_requests_total', 'Requests to city API', ['method', 'code'])
-duration = Summary('duration_db_seconds', 'Time spent reading or writing in the database')
-
 
 @app.route("/_health")
 def health():
@@ -54,7 +52,6 @@ def metrics():
     return generate_latest()
 
 
-@duration.time()
 @app.route("/city", methods=['POST', 'GET'])
 def city():
     """ Get or insert cities """

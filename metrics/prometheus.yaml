@@ -1,0 +1,7 @@
+scrape_configs:
+  - job_name: city_api
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+        - python:2022
+        # Same value as in CITY_API_PORT in .env

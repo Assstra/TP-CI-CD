@@ -3,4 +3,4 @@ psycopg2-binary
 pytest
 python-dotenv
 pytest-env
-prometheus_client
+prometheus-client
