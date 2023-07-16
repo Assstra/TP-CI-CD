@@ -179,7 +179,7 @@ jobs:
 
 ### 7. Modifiez le workflow pour que les tests s'exécutent à chaque push.
 
-## Solution N°1
+#### Solution N°1
 
 Ici les tests ont déjà été écrits. Il ne reste plus qu'à les inclure dans le workflow.
 
@@ -191,7 +191,7 @@ docker compose up postgres-test
 
 Lors des tests nous avons eu des problèmes pour connecter la base de données et l'application. L'application se lançait après la base de données mais pas assez tard pour que la base de données puisse accepter la connexion.
 
-## Solution N°2
+#### Solution N°2
 
 Après renseignement, nous avons découvert les [services](https://docs.github.com/en/actions/using-containerized-services/about-service-containers). Ils permettent de lancer des conteneurs docker et sont gérés par le workflow. Ils sont très configurables et permettent de préparer le "terrain" avant de lancer le workflow.
 
@@ -293,7 +293,7 @@ jobs:
           push: true
 ```
 
-## Remarques :
+#### Remarques :
   - On spécifie dans les variables d'environnement la registry utilisée pour push l'image (ghcr.io ici).
   - Il est nécessaire de se connecter en amont via l'action `docker/login-action@v2`. Cette action crée un token d'authentification `GITHUB_TOKEN` (ou utilise celui existant le cas echéant) pour se connecter à la registry de Github.
 
