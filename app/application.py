@@ -3,6 +3,7 @@ import os
 import json
 import psycopg2
 from flask import Flask, request
+from prometheus_client import Counter, Summary, generate_latest
 
 app = Flask(__name__)
 
@@ -34,13 +35,26 @@ except Exception as err1:
 # Open a cursor to perform database operations
 cur = conn.cursor()
 
+http_requests_total = Counter('http_requests_total', 'Requests to city API', ['method', 'code'])
+duration = Summary('duration_db_seconds', 'Time spent reading or writing in the database')
+
 
 @app.route("/_health")
 def health():
     """ Healthcheck """
+    http_requests_total.labels(
+        method='get',
+        code=204).inc()
     return "", 204
 
 
+@app.route('/metrics')
+def metrics():
+    """ Metrics """
+    return generate_latest()
+
+
+@duration.time()
 @app.route("/city", methods=['POST', 'GET'])
 def city():
     """ Get or insert cities """
@@ -60,7 +74,14 @@ def city():
                 ))
             conn.commit()
         except Exception as err2:
+            http_requests_total.labels(
+                method='post',
+                code=500).inc()
             return str(err2), 500
+
+        http_requests_total.labels(
+            method='post',
+            code=201).inc()
         return "", 201
 
     try:
@@ -70,7 +91,14 @@ def city():
         # Retrieve query results
         cities = cur.fetchall()
     except Exception as err3:
+        http_requests_total.labels(
+            method='get',
+            code=500).inc()
         return str(err3), 500
+
+    http_requests_total.labels(
+        method='get',
+        code=200).inc()
     return json.dumps(cities), 200
 
 
