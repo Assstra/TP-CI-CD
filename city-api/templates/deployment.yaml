@@ -20,7 +20,7 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        imagePullPolicy: Always
         ports:
           - name: http
             containerPort: {{ .Values.service.port }}
@@ -30,7 +30,7 @@ spec:
             path: {{ .Values.probePath }}
             port: http
           failureThreshold: 6
-          periodSeconds: 30
+          periodSeconds: 20
         livenessProbe:
           httpGet:
             path: {{ .Values.probePath }}
