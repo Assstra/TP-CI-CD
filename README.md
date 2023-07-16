@@ -397,6 +397,12 @@ To deploy the chart helm, simply run
 helm install city-api ./city-api
 ```
 
+Since we specified the service type to be a NodePort so we can access it from our machine, we need to get the url :
+```
+minikube service --all
+```
+Search for the service `api` and you will find the url next to it.
+
 14) Ajouter un endpoint `/metrics` compatible Prometheus (des [libs](https://sysdig.com/blog/prometheus-metrics/) sont disponibles).
 
 15) Ajoutez un Prometheus dans votre docker-compose qui scrappe les métriques de votre application.
