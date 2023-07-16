@@ -365,46 +365,48 @@ minikube start
 
 ### 12) Écrivez un chart Helm de déploiement de l'application.
 
-#### Install helm :
+#### Installer helm :
 
-Official documentation : https://helm.sh/docs/intro/install/
+Documentation officielle : https://helm.sh/docs/intro/install/
 
 
-Use the chart helm : 
+Pour utiliser le helm chart de manière générale : 
 ```
 helm install <name> <path_to_helm_directory>
 ```
 
-Stop it :
+Pour l'arrèter :
 ```
 helm uninstall <name>
 ```
 
-At the moment, the API is accessible from outside the Cluster, however if you wish to change that you can simply change the type of service to ClusterIP.
+Pour le moment, l'API est accessible depuis l'extérieur du cluster, mais en changeant la valeur du type de service à ClusterIP on peut le restreindre.
 ```yaml
 service:
   type: NodePort # change to ClusterIP to block access from outside the Clutser
 ```
-
-The username and password for the database are set in the city-api/values.yaml file, you are free to change them.
+L'utilisateur et le mot de passe sont défini dans le fichier city-api/values.yaml
 
 
 ### 13) Déployez votre application dans votre Minikube.
 
 
-To deploy the chart helm, simply run
+Pour déployer notre application dans le minikube il suffit de se positionner dans ce directoire et de installer le helm chart:
 ```
 helm install city-api ./city-api
 ```
 
-Since we specified the service type to be a NodePort so we can access it from our machine, we need to get the url :
+Pour récuperer le URL du service de l'API :
 ```
 minikube service --all
 ```
-Search for the service `api` and you will find the url next to it.
 
-14) Ajouter un endpoint `/metrics` compatible Prometheus (des [libs](https://sysdig.com/blog/prometheus-metrics/) sont disponibles).
+Vous trouverez le service `api` avec une url à côté.
 
-15) Ajoutez un Prometheus dans votre docker-compose qui scrappe les métriques de votre application.
+Il se peut que vous devez attendre un peu avant de pouvoir accèder à l'application.
 
-16) Ajoutez un Grafana dans votre docker-compose et créez y un dahsboard pour monitorer votre application
+1)  Ajouter un endpoint `/metrics` compatible Prometheus (des [libs](https://sysdig.com/blog/prometheus-metrics/) sont disponibles).
+
+2)  Ajoutez un Prometheus dans votre docker-compose qui scrappe les métriques de votre application.
+
+3)  Ajoutez un Grafana dans votre docker-compose et créez y un dahsboard pour monitorer votre application
